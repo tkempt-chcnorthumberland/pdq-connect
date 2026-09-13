@@ -1,0 +1,24 @@
+# Define target environment variable name and value
+$envVarName = "PSS_ROOT"
+$envVarValue = "C:\PSS"
+$envVarScope = [System.EnvironmentVariableTarget]::Machine
+
+# Retrieve the current value of the machine-level environment variable
+$currentValue = [System.Environment]::GetEnvironmentVariable($envVarName, $envVarScope)
+
+if ($null -eq $currentValue) {
+    # Variable does not exist - create it
+    Write-Output "Environment variable '$envVarName' does not exist. Creating it with value '$envVarValue'."
+    [System.Environment]::SetEnvironmentVariable($envVarName, $envVarValue, $envVarScope)
+    Write-Output "Environment variable '$envVarName' has been created."
+}
+elseif ($currentValue -ne $envVarValue) {
+    # Variable exists but value is incorrect - update it
+    Write-Output "Environment variable '$envVarName' exists but has an incorrect value ('$currentValue'). Updating to '$envVarValue'."
+    [System.Environment]::SetEnvironmentVariable($envVarName, $envVarValue, $envVarScope)
+    Write-Output "Environment variable '$envVarName' has been updated."
+}
+else {
+    # Variable exists and is already correct
+    Write-Output "Environment variable '$envVarName' already exists with the correct value ('$envVarValue'). No action taken."
+}
